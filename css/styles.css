@@ -1,0 +1,380 @@
+    *{
+    box-sizing:border-box;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    margin:0;
+    padding:0;
+    }
+
+    body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f0f2f5;
+    }
+
+    .phone{
+    width:360px;
+    height:640px;
+    background:#fff;
+    border-radius:32px;
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    padding:24px 20px 80px;
+    position:relative;
+    overflow:hidden;
+    }
+
+    .status-bar{
+    height:20px;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:11px;
+    color:#555;
+    }
+
+    .notch{
+    position:absolute;
+    top:12px;
+    left:50%;
+    transform:translateX(-50%);
+    width:170px;
+    height:26px;
+    background:#e3e5ea;
+    border-radius:20px;
+    }
+
+    .hola{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:18px;
+    color:#2d2d4f;
+    }
+
+    .subtitulo{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:16px;
+    color:#333;
+    }
+
+    .dose-row{
+    font-size:16px;
+    margin-bottom:8px;
+    color:#5b5ba0;
+    }
+
+    .dose-label{font-weight:600;}
+    .dose-time{font-weight:700;float:right;}
+
+    .next-dose{
+    margin-top:18px;
+    font-size:13px;
+    color:#555;
+    }
+
+    
+    .actions-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:40px;           /* ← MÁS espacio entre botones */
+    margin-top:48px;    /* ← baja el bloque completo */
+    margin-bottom:32px;
+    }
+
+
+    .action-btn{
+    width:52px;
+    height:52px;
+    border-radius:8px;
+    background:#5b008f;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+    font-size:26px;
+    cursor:pointer;
+    text-decoration:none;
+    }
+
+    .primary-btn{
+    display:block;
+    width:100%;
+    border:none;
+    border-radius:24px;
+    padding:14px;
+    background:#0070c9;
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    text-decoration:none;
+    }
+
+    .bottom-pager{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:16px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    }
+
+    .pager-main{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    border:none;
+    background:radial-gradient(circle at 30% 20%, #c79bf5 0, #5b008f 55%, #2c003f 100%);
+    box-shadow:0 0 0 6px rgba(184,140,238,0.5);
+    color:#fff;
+    font-size:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    cursor:pointer;
+    }
+
+
+
+        /* =========================
+    ESTILOS EXCLUSIVOS VISTA 2
+    ========================= */
+
+    .phone.vista-2 .header-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    }
+
+    .phone.vista-2 .title-2{
+    font-size:20px;
+    font-weight:700;
+    color:#2d2d4f;
+    }
+
+    .phone.vista-2 .avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:url("https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200") center/cover no-repeat;
+    }
+
+    /* GRID */
+    .phone.vista-2 .grid-meds{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-bottom:26px;
+    }
+
+    /* TARJETA BASE (IGUAL QUE ORIGINAL) */
+    .phone.vista-2 .med-card{
+    height:120px;
+    border-radius:20px;
+    background:#f5f7fb;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow:inset 0 0 0 1px #e1e4ef;
+    position:relative;
+    cursor:pointer;
+    overflow:hidden; /* respeta bordes */
+    }
+
+    /* LABEL */
+    .phone.vista-2 .med-label{
+    position:absolute;
+    top:8px;
+    left:10px;
+    font-size:10px;
+    color:#777;
+    z-index:2;
+    }
+
+    /* ICONO */
+    .phone.vista-2 .med-icon{
+    font-size:34px;
+    margin-top:10px;
+    z-index:2;
+    }
+
+    /* =========================
+    SELECCIÓN (RELLENO MORADO)
+    SIN ALTERAR DISEÑO
+    ========================= */
+
+    /* overlay apagado */
+    .phone.vista-2 .med-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:#5b008f;
+    opacity:0;
+    transition:opacity 0.2s ease;
+    border-radius:20px;
+    z-index:1;
+    pointer-events:none;
+    }
+
+    /* activar selección */
+    .phone.vista-2 .med-card.selected::after{
+    opacity:1;
+    }
+
+    /* texto e íconos SOLO en seleccionado */
+    .phone.vista-2 .med-card.selected .med-label,
+    .phone.vista-2 .med-card.selected .med-icon{
+    color:#ffffff;
+    }
+
+    /* BOTÓN INFERIOR */
+    .phone.vista-2 .bottom-area{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:16px;
+    display:flex;
+    justify-content:center;
+    }
+
+    .phone.vista-2 .pager-main{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 20%, #c79bf5 0, #5b008f 55%, #2c003f 100%);
+    box-shadow:0 0 0 6px rgba(184,140,238,0.5);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    }
+
+    /* =========================
+    BOTÓN TOMANDO MEDICINAS
+    ========================= */
+
+    /* estado desactivado */
+    .phone.vista-2 .primary-btn.disabled{
+    background: #e1e4ef;   /* gris como tarjetas */
+    color: #9aa0b5;
+    cursor: not-allowed;
+    pointer-events: none;
+    }
+
+
+
+
+    /* =========================
+    ESTILOS EXCLUSIVOS VISTA 3
+    ========================= */
+
+    .phone.vista-3 .header-cal{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    }
+
+    .phone.vista-3 .header-cal .icon{
+    font-size:26px;
+    }
+
+    .phone.vista-3 .header-cal h2{
+    font-size:22px;
+    font-weight:700;
+    color:#2d2d4f;
+    }
+
+    .phone.vista-3 .calendar-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+    }
+
+    .phone.vista-3 .calendar-table th,
+    .phone.vista-3 .calendar-table td{
+    border:1.5px solid #e25a5a;
+    padding:4px 2px;
+    text-align:center;
+    }
+
+    .phone.vista-3 .calendar-day{
+    text-align:left;
+    font-weight:700;
+    color:#333;
+    width:70px;
+    }
+
+    .phone.vista-3 .calendar-day small{
+    display:block;
+    font-weight:400;
+    color:#777;
+    }
+
+    .phone.vista-3 .slot-label{
+    font-weight:700;
+    color:#333;
+    width:24px;
+    }
+
+    .phone.vista-3 .slot-med{
+    width:100%;
+    height:26px;
+    border-radius:4px;
+    background:#f1f1f1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s, box-shadow .2s, transform .1s;
+    font-size:16px;
+    }
+
+    .phone.vista-3 .slot-med.taken{
+    background:#5b008f;
+    box-shadow:0 0 0 2px rgba(91,0,143,0.3);
+    color:#fff;
+    transform:scale(0.95);
+    }
+
+    .phone.vista-3 .bottom-pager{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:16px;
+    display:flex;
+    justify-content:center;
+    gap:48px;
+    align-items:center;
+    }
+
+    .phone.vista-3 .pager-btn{
+    width:40px;
+    height:40px;
+    border:2px solid #7a1bb5;
+    background:#fff;
+    color:#7a1bb5;
+    font-size:18px;
+    border-radius:50%;
+    cursor:pointer;
+    }
+
+    .phone.vista-3 .pager-main{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 20%, #c79bf5 0, #5b008f 55%, #2c003f 100%);
+    box-shadow:0 0 0 6px rgba(184,140,238,0.5);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    }

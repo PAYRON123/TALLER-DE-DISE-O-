@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>App Medicinas Don Pedro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS EXTERNO -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="status-bar">
+      <span id="current-time">--:--</span>
+      <span>📶 🔋</span>
+    </div>
+
+    <h1 class="hola">
+      HOLA <span id="user-name">DON PEDRO</span> 👋
+    </h1>
+
+    <h2 class="subtitulo">TOMAS:</h2>
+
+    <div class="dose-row">
+      <span class="dose-label">Mañana</span>
+      <span class="dose-time">9:00 AM</span>
+    </div>
+    <div class="dose-row">
+      <span class="dose-label">Tarde</span>
+      <span class="dose-time">3:00 PM</span>
+    </div>
+    <div class="dose-row">
+      <span class="dose-label">Noche</span>
+      <span class="dose-time">9:00 PM</span>
+    </div>
+
+    
+    <p class="next-dose" id="next-dose-text">
+      Calculando siguiente toma...
+    </p>
+
+    <div class="actions-row">
+      <a class="action-btn" href="vista3.html" title="Ver calendario">📅</a>
+      <a class="action-btn" href="#" title="Llamar">📞</a>
+      <a class="action-btn" href="#" title="Foto">📷</a>
+    </div>
+
+    <br/>
+    <a class="primary-btn" href="vista2.html">
+      TOMAR MEDICINA AHORA
+    </a>
+
+    <div class="bottom-pager">
+      <a class="pager-main" href="index.html">●</a>
+    </div>
+  </div>
+
+  <!-- JS: HORA ACTUAL -->
+  <script>
+    function updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      document.getElementById("current-time").textContent =
+        `${hours}:${minutes}`;
+    }
+
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
+
+  <!-- calcular siguiente toma -->
+  <script>
+    function calcularSiguienteToma() {
+      const now = new Date();
+
+      // horas de las tomas (24h)
+      const tomas = [9, 15, 21];
+
+      let nextDose = null;
+
+      for (let h of tomas) {
+        const doseTime = new Date();
+        doseTime.setHours(h, 0, 0, 0);
+
+        if (doseTime > now) {
+          nextDose = doseTime;
+          break;
+        }
+      }
+
+      // si ya pasó la última toma, usar mañana a las 9
+      if (!nextDose) {
+        nextDose = new Date();
+        nextDose.setDate(nextDose.getDate() + 1);
+        nextDose.setHours(9, 0, 0, 0);
+      }
+
+      const diffMs = nextDose - now;
+      const diffMinutes = Math.floor(diffMs / 60000);
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      const text = `Faltan ${hours}h ${minutes}m para su siguiente toma`;
+      document.getElementById("next-dose-text").textContent = text;
+    }
+
+    calcularSiguienteToma();
+    setInterval(calcularSiguienteToma, 60000); // actualizar cada minuto
+  </script>
+
+
+  <!-- JS: NOMBRE EDITABLE -->
+  <script>
+    const nameSpan = document.getElementById("user-name");
+
+    const savedName = sessionStorage.getItem("userName");
+    if (savedName) {
+      nameSpan.textContent = savedName;
+    }
+
+    nameSpan.addEventListener("click", () => {
+      const newName = prompt("Ingrese el nombre:", nameSpan.textContent);
+      if (newName && newName.trim() !== "") {
+        const finalName = newName.trim().toUpperCase();
+        nameSpan.textContent = finalName;
+        sessionStorage.setItem("userName", finalName);
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vista 2 - Su Toma</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="phone vista-2">
+    <div class="notch"></div>
+
+    <div class="status-bar">
+      <span id="current-time">--:--</span>
+      <span>📶 🔋</span>
+    </div>
+
+    <div class="header-row">
+      <div class="title-2">
+        SU TOMA <span id="user-name">DON PEDRO</span>
+      </div>
+      <div class="avatar" id="avatar-user"></div>
+    </div>
+
+    <div class="grid-meds">
+      <div class="med-card">
+        <div class="med-label">Medicina N1</div>
+        <div class="med-icon">💊</div>
+      </div>
+      <div class="med-card">
+        <div class="med-label">Medicina N2</div>
+        <div class="med-icon">💊💊</div>
+      </div>
+      <div class="med-card">
+        <div class="med-label">Medicina N3</div>
+        <div class="med-icon">🟦</div>
+      </div>
+      <div class="med-card">
+        <div class="med-label">Medicina N4</div>
+        <div class="med-icon">🧪</div>
+      </div>
+    </div>
+
+    <a class="primary-btn disabled" id="btn-tomar" href="index.html">
+      TOMANDO MEDICINAS
+    </a>
+
+
+    <div class="bottom-area">
+      <div class="bottom-pager">
+        <a class="pager-main" href="index.html">●</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS HORA -->
+  <script>
+    function updateTime() {
+      const timeEl = document.getElementById("current-time");
+      if (!timeEl) return;
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      timeEl.textContent = `${h}:${m}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
+
+  <!-- JS NOMBRE -->
+  <script>
+    const nameSpan = document.getElementById("user-name");
+    const savedName = sessionStorage.getItem("userName");
+    if (nameSpan && savedName) {
+      nameSpan.textContent = savedName;
+    }
+  </script>
+
+  <!-- JS AVATAR femenino y masculino -->
+  <script>
+    const avatar = document.getElementById("avatar-user");
+
+    // imágenes
+    const avatarMasculino =
+      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200";
+
+    const avatarFemenino =
+      "https://img.freepik.com/fotos-premium/atractiva-mujer-joven-que-encuentran-aisladas-sobre-pared-blanca-sonriendo_171337-91519.jpg";
+
+    // cargar avatar guardado
+    const savedAvatar = sessionStorage.getItem("avatarGenero");
+    if (savedAvatar === "femenino") {
+      avatar.style.backgroundImage = `url('${avatarFemenino}')`;
+    } else {
+      avatar.style.backgroundImage = `url('${avatarMasculino}')`;
+    }
+
+    // alternar al hacer click
+    avatar.addEventListener("click", () => {
+      const current = sessionStorage.getItem("avatarGenero");
+
+      if (current === "femenino") {
+        avatar.style.backgroundImage = `url('${avatarMasculino}')`;
+        sessionStorage.setItem("avatarGenero", "masculino");
+      } else {
+        avatar.style.backgroundImage = `url('${avatarFemenino}')`;
+        sessionStorage.setItem("avatarGenero", "femenino");
+      }
+    });
+  </script>
+
+  
+
+  <script>
+    const medCards = document.querySelectorAll(".phone.vista-2 .med-card");
+    const tomarBtn = document.getElementById("btn-tomar");
+
+    // cargar selección guardada
+    const savedMeds = JSON.parse(
+      sessionStorage.getItem("medicinasSeleccionadas") || "[]"
+    );
+
+    // restaurar selección
+    medCards.forEach((card, index) => {
+      if (savedMeds.includes(index)) {
+        card.classList.add("selected");
+      }
+
+      card.addEventListener("click", () => {
+        card.classList.toggle("selected");
+        actualizarEstado();
+      });
+    });
+
+    function actualizarEstado() {
+      const seleccionadas = [];
+      medCards.forEach((card, index) => {
+        if (card.classList.contains("selected")) {
+          seleccionadas.push(index);
+        }
+      });
+
+      // guardar estado
+      sessionStorage.setItem(
+        "medicinasSeleccionadas",
+        JSON.stringify(seleccionadas)
+      );
+
+      // activar o desactivar botón
+      if (seleccionadas.length > 0) {
+        tomarBtn.classList.remove("disabled");
+        tomarBtn.style.pointerEvents = "auto";
+      } else {
+        tomarBtn.classList.add("disabled");
+        tomarBtn.style.pointerEvents = "none";
+      }
+    }
+
+    // ejecutar al cargar
+    actualizarEstado();
+  </script>
+
+
+</body>
+</html>

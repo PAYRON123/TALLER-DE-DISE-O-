@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vista 3 - Calendario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS EXTERNO -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <div class="phone vista-3">
+    <div class="notch"></div>
+
+    <div class="status-bar">
+      <span id="current-time">--:--</span>
+      <span>📶 🔋</span>
+    </div>
+
+    
+    <div class="header-cal">
+      <span class="icon">📅</span>
+      <h2>
+        CALENDARIO
+      </h2>
+    </div>
+
+    <br/>
+    <table class="calendar-table">
+      <thead>
+        
+      </thead>
+      <tbody id="calendar-body">
+        <!-- generado por JS -->
+      </tbody>
+    </table>
+
+    <div class="bottom-pager">
+      <button class="pager-btn" id="prev-btn">←</button>
+      <button class="pager-main" id="home-btn">●</button>
+      <button class="pager-btn" id="next-btn">→</button>
+    </div>
+  </div>
+
+  <!-- JS: CALENDARIO -->
+  <script>
+    const dayNames = ["Dom","Lun","Mar","Mié","Jue","Vie","Sab"];
+    const slotLabels = ["M","T","N"];
+    const medIcons = ["💊","💊💊","🟦","🧪"];
+    const tbody = document.getElementById("calendar-body");
+
+    let currentStartDate = new Date();
+    currentStartDate.setHours(0, 0, 0, 0);
+
+
+    // cargar estado guardado
+    function getSavedCalendar() {
+      return JSON.parse(
+        sessionStorage.getItem("calendarSeleccion") || "[]"
+      );
+    }
+
+    function saveCalendar(data) {
+      sessionStorage.setItem(
+        "calendarSeleccion",
+        JSON.stringify(data)
+      );
+    }
+
+    function renderCalendar() {
+      tbody.innerHTML = "";
+      const saved = getSavedCalendar();
+
+      for (let i = 0; i < 3; i++) {
+        const d = new Date(currentStartDate);
+        d.setDate(currentStartDate.getDate() + i);
+        const dateKey = d.toISOString().slice(0,10);
+
+        const dayName = dayNames[d.getDay()];
+        const dayNum  = d.getDate();
+
+        slotLabels.forEach((slot, slotIdx) => {
+          const tr = document.createElement("tr");
+
+          if (slotIdx === 0) {
+            const tdDay = document.createElement("td");
+            tdDay.className = "calendar-day";
+            tdDay.innerHTML = `${dayName}<br><small>${dayNum}</small>`;
+            tr.appendChild(tdDay);
+          } else {
+            tr.appendChild(document.createElement("td"));
+          }
+
+          const tdSlot = document.createElement("td");
+          tdSlot.className = "slot-label";
+          tdSlot.textContent = slot;
+          tr.appendChild(tdSlot);
+
+          medIcons.forEach((icon, medIndex) => {
+            const td = document.createElement("td");
+            const box = document.createElement("div");
+            box.className = "slot-med";
+            box.textContent = icon;
+
+            const key = `${dateKey}|${slot}|${medIndex}`;
+
+            // restaurar selección
+            if (saved.includes(key)) {
+              box.classList.add("taken");
+            }
+
+            box.addEventListener("click", () => {
+              box.classList.toggle("taken");
+
+              let updated = getSavedCalendar();
+
+              if (box.classList.contains("taken")) {
+                if (!updated.includes(key)) {
+                  updated.push(key);
+                }
+              } else {
+                updated = updated.filter(k => k !== key);
+              }
+
+              saveCalendar(updated);
+            });
+
+            td.appendChild(box);
+            tr.appendChild(td);
+          });
+
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    document.getElementById("prev-btn").onclick = () => {
+      currentStartDate.setDate(currentStartDate.getDate() - 3);
+      renderCalendar();
+    };
+
+    document.getElementById("next-btn").onclick = () => {
+      currentStartDate.setDate(currentStartDate.getDate() + 3);
+      renderCalendar();
+    };
+
+    document.getElementById("home-btn").onclick = () => {
+      window.location.href = "index.html";
+    };
+
+    renderCalendar();
+  </script>
+
+
+  <!-- JS: HORA -->
+  <script>
+    function updateTime() {
+      const t = document.getElementById("current-time");
+      if (!t) return;
+      const n = new Date();
+      let h = n.getHours();
+      let m = n.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      t.textContent = `${h}:${m}`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+  </script>
+
+  <!-- JS: NOMBRE -->
+  <script>
+    const nameSpan = document.getElementById("user-name");
+    const savedName = sessionStorage.getItem("userName");
+    if (nameSpan && savedName) {
+      nameSpan.textContent = savedName;
+    }
+  </script>
+
+</body>
+</html>
